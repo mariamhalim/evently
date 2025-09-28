@@ -6,11 +6,9 @@ import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_language_provider.dart';
-import '../providers/app_theme_provider.dart' show AppThemeProvider;
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -133,7 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.already,
-                              style: AppStyles.bold16Black,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineMedium
                             ),
                             TextButton(
                               onPressed: () {},

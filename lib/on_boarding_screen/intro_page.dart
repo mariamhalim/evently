@@ -1,4 +1,3 @@
-import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_routes.dart';
@@ -36,7 +35,6 @@ class IntroPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 30),
 
-                /// صورة كبيرة (Artwork)
                 Image.asset(
                   AppAssets.OB4,
                   width: width * 0.7,
@@ -60,7 +58,7 @@ class IntroPage extends StatelessWidget {
                 /// Subtitle
                 Text(
                   AppLocalizations.of(context)!.personalizeSubtitle,
-                  style: AppStyles.MidBlack16,
+                  style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
 

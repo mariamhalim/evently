@@ -37,7 +37,7 @@ class AppTheme {
     cardColor: AppColors.blackColor,
     textTheme: TextTheme(
       headlineLarge: AppStyles.bold20Black,
-      headlineMedium: AppStyles.MidBluet16,
+      headlineMedium: AppStyles.MidBlack16,
       headlineSmall: AppStyles.bold14blue,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
