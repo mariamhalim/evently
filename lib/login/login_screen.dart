@@ -7,6 +7,7 @@ import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/app_language_provider.dart';
 import '../utils/app_routes.dart';
 
@@ -110,7 +111,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.have_account,
-                              style: Theme.of(context).textTheme.headlineMedium,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headlineMedium
                             ),
                             TextButton(
                               onPressed: () {
