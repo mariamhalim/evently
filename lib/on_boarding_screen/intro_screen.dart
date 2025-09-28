@@ -1,8 +1,9 @@
+import 'package:evently/utils/app_assets.dart';
+import 'package:evently/utils/app_colors.dart' show AppColors;
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:evently/utils/app_assets.dart';
-import 'package:evently/utils/app_colors.dart' show AppColors;
+
 import '../l10n/app_localizations.dart';
 import '../utils/app_routes.dart';
 
@@ -31,7 +32,10 @@ class OnBoardingScreen extends StatelessWidget {
                   const SizedBox(height: 30),
                   Text(
                     AppLocalizations.of(context)!.onBoardingBody1,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineMedium
                   ),
                 ],
               ),
@@ -58,7 +62,10 @@ class OnBoardingScreen extends StatelessWidget {
                   const SizedBox(height: 30),
                   Text(
                     AppLocalizations.of(context)!.onBoardingBody2,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineMedium
                   ),
                 ],
               ),
@@ -84,7 +91,10 @@ class OnBoardingScreen extends StatelessWidget {
                   const SizedBox(height: 30),
                   Text(
                     AppLocalizations.of(context)!.onBoardingBody3,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineMedium
                   ),
                 ],
               ),
