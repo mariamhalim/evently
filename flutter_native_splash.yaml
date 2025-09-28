@@ -1,0 +1,10 @@
+flutter_native_splash:
+  color: "#F2FEFF"                  # لون الخلفية
+  image: assets/images/Group 1 (4).png     # اللوجو
+  branding: assets/images/branding.png   # النص/البراند اللي تحت
+
+
+  android_12:
+    image: assets/images/Group 1 (4).png
+    color: "#F2FEFF"
+    branding: assets/images/branding.png
