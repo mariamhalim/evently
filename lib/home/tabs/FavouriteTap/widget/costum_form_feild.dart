@@ -43,6 +43,7 @@ class CostumeFormField extends StatelessWidget {
         horizontal: width * 0.03,
       ),
       child: TextFormField(
+        style: Theme.of(context).textTheme.headlineLarge,
         controller: controller,
         obscureText: obscureText!,
         keyboardType: KeyboardType,
