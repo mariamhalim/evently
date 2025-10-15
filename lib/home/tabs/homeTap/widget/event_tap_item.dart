@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 class EventTabItem extends StatelessWidget {
   String tapItemName;
   bool isSelected;
+  Color selectedBgColor;
+  TextStyle? selectedTextColor;
 
   EventTabItem({
     super.key,
     required this.tapItemName,
     required this.isSelected,
+    required this.selectedBgColor,
+    required this.selectedTextColor
   });
 
   @override
@@ -21,10 +25,14 @@ class EventTabItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: width * 0.04,
-        vertical: height * 0.003,
+        vertical: height * 0.005,
+      ),
+      margin: EdgeInsets.symmetric(
+        horizontal: width * 0.01,
+        vertical: height * 0.02,
       ),
       decoration: BoxDecoration(
-        color: isSelected ? Theme.of(context).focusColor : AppColors.trancColor,
+        color: isSelected ? selectedBgColor : AppColors.trancColor,
         border: Border.all(color: Theme.of(context).focusColor, width: 2),
         borderRadius: BorderRadius.circular(46),
       ),
@@ -33,7 +41,7 @@ class EventTabItem extends StatelessWidget {
           Text(
             tapItemName,
             style: isSelected
-                ? Theme.of(context).textTheme.headlineMedium
+                ? selectedTextColor
                 : AppStyles.MidWight16,
           ),
         ],

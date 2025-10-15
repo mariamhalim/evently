@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 
 class CostumeElevatedButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final String text;
+  final String? text;
   final Color? backgroundColor;
   final TextStyle? textStyle;
   final Color borderColor;
   final bool hasIcon;
-  final Widget iconName;
+  final Widget? childIconWidget;
 
   const CostumeElevatedButton({
     super.key,
     required this.onPressed,
-    required this.text,
+    this.text,
     this.backgroundColor = AppColors.blueColor,
     this.borderColor = AppColors.trancColor,
     this.textStyle,
     this.hasIcon = false,
-    required this.iconName,
+    this.childIconWidget
   });
 
   @override
@@ -41,14 +41,8 @@ class CostumeElevatedButton extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: hasIcon
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                iconName ?? SizedBox(),
-                Text(text, style: textStyle ?? AppStyles.MidWhite20),
-              ],
-            )
-          : Text(text, style: textStyle ?? AppStyles.MidWhite20),
+          ? childIconWidget
+          : Text(text ?? '', style: textStyle ?? AppStyles.MidWhite20),
     );
   }
 }

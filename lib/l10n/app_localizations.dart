@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @onBoardingBody2.
   ///
   /// In en, this message translates to:
-  /// **'Take the hassle out of organizing events...'**
+  /// **'Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we’ve got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests.'**
   String get onBoardingBody2;
 
   /// No description provided for @onBoardingTitle3.
@@ -371,8 +371,116 @@ abstract class AppLocalizations {
   /// No description provided for @onBoardingBody3.
   ///
   /// In en, this message translates to:
-  /// **'Make every event memorable by sharing...'**
+  /// **'Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories.'**
   String get onBoardingBody3;
+
+  /// No description provided for @create_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Event'**
+  String get create_event;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @event_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Title'**
+  String get event_title;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @event_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Description'**
+  String get event_description;
+
+  /// No description provided for @event_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Date'**
+  String get event_date;
+
+  /// No description provided for @choose_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Date'**
+  String get choose_date;
+
+  /// No description provided for @event_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Time'**
+  String get event_time;
+
+  /// No description provided for @choose_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Time'**
+  String get choose_time;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @choose_event_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Event Location'**
+  String get choose_event_location;
+
+  /// No description provided for @add_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Event'**
+  String get add_event;
+
+  /// No description provided for @add_event_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Add event successfully'**
+  String get add_event_successfully;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @no_events.
+  ///
+  /// In en, this message translates to:
+  /// **'No events added yet.'**
+  String get no_events;
+
+  /// No description provided for @event_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Event details'**
+  String get event_details;
+
+  /// No description provided for @update_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Update event'**
+  String get update_event;
+
+  /// No description provided for @edit_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit event'**
+  String get edit_event;
 }
 
 class _AppLocalizationsDelegate

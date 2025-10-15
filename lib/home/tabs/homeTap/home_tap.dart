@@ -1,10 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/home/tabs/homeTap/widget/event_item.dart';
 import 'package:evently/home/tabs/homeTap/widget/event_tap_item.dart';
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/model/events.dart';
+import 'package:evently/providers/event_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+
+import '../../../add_event/event_detailes.dart';
+import '../../../providers/event_provider.dart';
 
 class HomeTap extends StatefulWidget {
   HomeTap({super.key});
@@ -14,24 +22,17 @@ class HomeTap extends StatefulWidget {
 }
 
 class _HomeTapState extends State<HomeTap> {
-  int selectedIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
+    var eventListProvider = Provider.of<EventListProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    List<String> activities = [
-      AppLocalizations.of(context)!.all,
-      AppLocalizations.of(context)!.sport,
-      AppLocalizations.of(context)!.birthday,
-      AppLocalizations.of(context)!.meeting,
-      AppLocalizations.of(context)!.gaming,
-      AppLocalizations.of(context)!.workshop,
-      AppLocalizations.of(context)!.bookClub,
-      AppLocalizations.of(context)!.exhibition,
-      AppLocalizations.of(context)!.holiday,
-      AppLocalizations.of(context)!.eating,
-    ];
+    eventListProvider.getEventListName(context);
+    if (eventListProvider.eventList.isEmpty) {
+      eventListProvider.getAllEvents();
+    }
     // TODO: implement build
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -69,7 +70,7 @@ class _HomeTapState extends State<HomeTap> {
         body: Column(
           children: [
             Container(
-              height: height * 0.1,
+              height: height * 0.13,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
@@ -78,68 +79,97 @@ class _HomeTapState extends State<HomeTap> {
                   bottomRight: Radius.circular(16),
                 ),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: height * 0.01,
-                      horizontal: width * 0.03,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: height * 0.01,
+                        horizontal: width * 0.03,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: AppColors.whiteColor,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.cairo,
+                            style: AppStyles.MidWight16,
+                          ),
+                          Text(', ', style: AppStyles.MidWight16),
+                          Text(
+                            AppLocalizations.of(context)!.egypt,
+                            style: AppStyles.MidWight16,
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: AppColors.whiteColor,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.cairo,
-                          style: AppStyles.MidWight16,
-                        ),
-                        Text(', ', style: AppStyles.MidWight16),
-                        Text(
-                          AppLocalizations.of(context)!.egypt,
-                          style: AppStyles.MidWight16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  DefaultTabController(
-                    length: activities.length,
+                    DefaultTabController(
+                      length: eventListProvider.activities.length,
 
-                    child: TabBar(
-                      onTap: (index) {
-                        selectedIndex = index;
-                        setState(() {});
-                      },
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.start,
-                      indicatorColor: AppColors.trancColor,
-                      dividerColor: AppColors.trancColor,
-                      tabs: activities
-                          .map(
-                            (tapItemName) => EventTabItem(
-                              tapItemName: tapItemName,
-                              isSelected:
-                                  selectedIndex ==
-                                  activities.indexOf(tapItemName),
-                            ),
-                          )
-                          .toList(), // EventTabItem
-                    ), // TabBar
-                  ),
-                ],
+                      child: TabBar(
+                        onTap: (index) {
+                          eventListProvider.changeSelectedIndex(index);
+                        },
+                        isScrollable: true,
+                        tabAlignment: TabAlignment.start,
+                        indicatorColor: AppColors.trancColor,
+                        dividerColor: AppColors.trancColor,
+                        tabs: eventListProvider.activities
+                            .map(
+                              (tapItemName) =>
+                              EventTabItem(
+                                selectedTextColor: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyMedium,
+                                selectedBgColor: Theme
+                                    .of(context)
+                                    .focusColor,
+                                tapItemName: tapItemName,
+                                isSelected:
+                                eventListProvider.selectedIndex ==
+                                    eventListProvider.activities.indexOf(
+                                        tapItemName),
+                              ),
+                        )
+                            .toList(), // EventTabItem
+                      ), // TabBar
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return EventItem();
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: height * 0.02);
-                },
-                itemCount: 20,
+              child: Center(
+                child: eventListProvider.eventFilterList.isEmpty ?
+                Text(AppLocalizations.of(context)!.no_events,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineLarge,)
+                    : ListView.separated(
+                  itemCount: eventListProvider.eventFilterList.length,
+                  separatorBuilder: (context, index) =>
+                      SizedBox(height: height * 0.02),
+                  itemBuilder: (context, index) {
+                    final event = eventListProvider.eventFilterList[index];
+                    return EventItem(
+                      event: event,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EventDetailsPage(event: event),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
             // DefaultTabController
@@ -148,4 +178,5 @@ class _HomeTapState extends State<HomeTap> {
       ),
     );
   }
+
 }

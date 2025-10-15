@@ -1,7 +1,7 @@
 import 'package:evently/home/tabs/Profile/language/language_bottom_sheet.dart';
 import 'package:evently/home/tabs/Profile/theme/theme_bottom_sheet.dart';
 import 'package:evently/l10n/app_localizations.dart';
-import 'package:evently/login/widgets/costtum_e=button.dart';
+import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/providers/app_language_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
@@ -137,13 +137,18 @@ class _ProfileTapState extends State<ProfileTap> {
                 padding: EdgeInsets.only(bottom: height * 0.01),
                 child: CostumeElevatedButton(
                   onPressed: () {},
-                  iconName: SizedBox(
-                    width: width * 0.15,
-                    child: Icon(
-                      Icons.logout,
-                      color: AppColors.whiteColor,
-                      size: 30,
-                    ),
+                  childIconWidget: Row(
+                    children: [
+                      SizedBox(
+                        width: width * 0.03,
+                      ),
+                      Icon(Icons.logout, color: AppColors.whiteColor, size: 30)
+                      , SizedBox(
+                        width: width * 0.02,
+                      ),
+                      Text(AppLocalizations.of(context)!.logOut,
+                          style: AppStyles.MidWhite20),
+                    ],
                   ),
                   text: AppLocalizations.of(context)!.logOut,
                   hasIcon: true,

@@ -1,11 +1,12 @@
 import 'package:evently/home/tabs/FavouriteTap/widget/costum_form_feild.dart';
 import 'package:evently/l10n/app_localizations.dart';
-import 'package:evently/login/widgets/costtum_e=button.dart';
+import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_language_provider.dart';
@@ -19,7 +20,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
-
+  final _languageController = ValueNotifier<bool>(false);
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -29,6 +30,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController rePasswordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final languageProvider = context.read<AppLanguageProvider>();
+
+    _languageController.value = languageProvider.appLanguage == 'ar';
+
+    _languageController.addListener(() {
+      if (_languageController.value) {
+        languageProvider.changeLanguage('ar');
+      } else {
+        languageProvider.changeLanguage('en');
+      }
+    });
+  }
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -122,8 +137,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         CostumeElevatedButton(
                           onPressed: register,
-                          text: AppLocalizations.of(context)!.create_account,
-                          iconName: SizedBox(),
+                          hasIcon: true,
+                          childIconWidget: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: width * 0.02,
+                              ),
+                              Text(AppLocalizations.of(context)!.create_account,
+                                  style: AppStyles.MidWhite20),
+                            ],
+                          ),
                         ),
                         SizedBox(height: height * 0.02),
                         Row(
@@ -151,21 +175,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(
-                              icon: const Text(
-                                "🇺🇸",
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              onPressed: () =>
-                                  languageProvider.changeLanguage('en'),
-                            ),
-                            IconButton(
-                              icon: const Text(
-                                "🇪🇬",
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              onPressed: () =>
-                                  languageProvider.changeLanguage('ar'),
+                            AdvancedSwitch(
+                              controller: _languageController,
+                              activeChild: const Text(
+                                  "🇪🇬", style: TextStyle(fontSize: 22)),
+                              inactiveChild: const Text(
+                                  "🇺🇸", style: TextStyle(fontSize: 22)),
+                              borderRadius: BorderRadius.circular(30),
+                              width: 70,
+                              height: 35,
+                              activeColor: AppColors.blueColor,
+                              inactiveColor: Colors.grey.shade400,
                             ),
                           ],
                         ),

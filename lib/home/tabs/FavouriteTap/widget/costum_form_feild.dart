@@ -17,6 +17,8 @@ class CostumeFormField extends StatelessWidget {
   OnValidator? validator;
   bool? obscureText;
   TextEditingController? controller;
+  int maxLines;
+
 
   CostumeFormField({
     super.key,
@@ -31,6 +33,7 @@ class CostumeFormField extends StatelessWidget {
     this.KeyboardType = TextInputType.text,
     this.obscureText = false,
     required this.controller,
+    this.maxLines = 1
   });
 
   @override
@@ -48,6 +51,7 @@ class CostumeFormField extends StatelessWidget {
         obscureText: obscureText!,
         keyboardType: KeyboardType,
         validator: validator,
+        maxLines: maxLines,
         decoration: InputDecoration(
           enabledBorder: buildDecorationBorder(
             borderSideColor: borderSideColor,

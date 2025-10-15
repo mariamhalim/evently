@@ -87,4 +87,19 @@ class AppStyles {
     color: AppColors.greyColor,
     fontWeight: FontWeight.bold,
   );
+  static final TextStyle MidNavtt16 = GoogleFonts.almarai(
+    fontSize: 16,
+    color: AppColors.navyBlueColor,
+    fontWeight: FontWeight.w500,
+  );
+  static final TextStyle MidRedt16 = GoogleFonts.almarai(
+    fontSize: 16,
+    color: AppColors.redColor,
+    fontWeight: FontWeight.w500,
+  );
+  static final TextStyle MidBluet24 = GoogleFonts.almarai(
+    fontSize: 24,
+    color: AppColors.blueColor,
+    fontWeight: FontWeight.w500,
+  );
 }

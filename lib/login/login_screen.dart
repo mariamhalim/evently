@@ -1,11 +1,12 @@
 import 'package:evently/home/tabs/FavouriteTap/widget/costum_form_feild.dart';
 import 'package:evently/l10n/app_localizations.dart';
-import 'package:evently/login/widgets/costtum_e=button.dart';
+import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_language_provider.dart';
@@ -17,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _languageController = ValueNotifier<bool>(false);
   final formKey = GlobalKey<FormState>();
 
   TextEditingController emailContriller = TextEditingController();
@@ -24,6 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordContriller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final languageProvider = context.read<AppLanguageProvider>();
+
+    _languageController.value = languageProvider.appLanguage == 'ar';
+
+    _languageController.addListener(() {
+      if (_languageController.value) {
+        languageProvider.changeLanguage('ar');
+      } else {
+        languageProvider.changeLanguage('en');
+      }
+    });
+  }
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -103,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         CostumeElevatedButton(
                           onPressed: login,
                           text: AppLocalizations.of(context)!.login,
-                          iconName: SizedBox(),
                         ),
                         SizedBox(height: height * 0.02),
                         Row(
@@ -162,34 +177,37 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: AppColors.trancColor,
                           textStyle: AppStyles.MidBlue20,
                           hasIcon: true,
-                          iconName: Container(
-                            height: 26,
-                            width: 26,
-                            child: Image(image: AssetImage(AppAssets.google)),
-                          ),
                           onPressed: login,
-                          text: AppLocalizations.of(context)!.login_with_google,
                           borderColor: AppColors.blueColor,
+                          childIconWidget: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(image: AssetImage(AppAssets.google),
+                                width: width * 0.04, height: height * 0.04,)
+                              , SizedBox(
+                                width: width * 0.02,
+                              ),
+                              Text(AppLocalizations.of(context)!
+                                  .login_with_google,
+                                  style: AppStyles.MidBlue20),
+                            ],
+                          ),
                         ),
                         SizedBox(height: height * 0.02),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(
-                              icon: const Text(
-                                "🇺🇸",
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              onPressed: () =>
-                                  languageProvider.changeLanguage('en'),
-                            ),
-                            IconButton(
-                              icon: const Text(
-                                "🇪🇬",
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              onPressed: () =>
-                                  languageProvider.changeLanguage('ar'),
+                            AdvancedSwitch(
+                              controller: _languageController,
+                              activeChild: const Text(
+                                  "🇪🇬", style: TextStyle(fontSize: 22)),
+                              inactiveChild: const Text(
+                                  "🇺🇸", style: TextStyle(fontSize: 22)),
+                              borderRadius: BorderRadius.circular(30),
+                              width: 70,
+                              height: 35,
+                              activeColor: AppColors.blueColor,
+                              inactiveColor: Colors.grey.shade400,
                             ),
                           ],
                         ),

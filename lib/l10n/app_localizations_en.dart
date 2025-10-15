@@ -140,11 +140,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onBoardingTitle2 => 'Effortless Event Planning';
 
   @override
-  String get onBoardingBody2 => 'Take the hassle out of organizing events...';
+  String get onBoardingBody2 =>
+      'Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we’ve got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests.';
 
   @override
   String get onBoardingTitle3 => 'Connect with Friends & Share Moments';
 
   @override
-  String get onBoardingBody3 => 'Make every event memorable by sharing...';
+  String get onBoardingBody3 =>
+      'Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories.';
+
+  @override
+  String get create_event => 'Create Event';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get event_title => 'Event Title';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get event_description => 'Event Description';
+
+  @override
+  String get event_date => 'Event Date';
+
+  @override
+  String get choose_date => 'Choose Date';
+
+  @override
+  String get event_time => 'Event Time';
+
+  @override
+  String get choose_time => 'Choose Time';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get choose_event_location => 'Choose Event Location';
+
+  @override
+  String get add_event => 'Add Event';
+
+  @override
+  String get add_event_successfully => 'Add event successfully';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get no_events => 'No events added yet.';
+
+  @override
+  String get event_details => 'Event details';
+
+  @override
+  String get update_event => 'Update event';
+
+  @override
+  String get edit_event => 'Edit event';
 }

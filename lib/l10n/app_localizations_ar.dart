@@ -134,17 +134,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onBoardingBody1 =>
-      'انغمس في عالم من الفعاليات المصممة بما يناسب اهتماماتك...';
+      'انغمس في عالم من الفعاليات المصممة لتناسب اهتماماتك الفريدة. سواء كنت من محبي الحفلات الموسيقية الحية، أو ورش الفنون، أو الشبكات المهنية، أو حتى استكشاف تجارب جديدة، لدينا ما يناسب الجميع. توصياتنا المختارة بعناية ستساعدك على الاستكشاف والتواصل والاستفادة القصوى من كل فرصة من حولك';
 
   @override
   String get onBoardingTitle2 => 'تخطيط فعاليات بسهولة';
 
   @override
-  String get onBoardingBody2 => 'بسهولة نظّم فعالياتك مع أدواتنا الشاملة...';
+  String get onBoardingBody2 =>
+      'تخلص من عناء تنظيم الفعاليات مع أدوات التخطيط الشاملة لدينا. من إعداد الدعوات وإدارة تأكيد الحضور، إلى جدولة التذكيرات وتنسيق التفاصيل، نحن نوفر لك كل ما تحتاجه. خطط بسهولة وركز على ما يهم حقًا – صنع تجربة لا تُنسى لك ولضيوفك.';
 
   @override
   String get onBoardingTitle3 => 'تواصل مع الأصدقاء وشارك اللحظات';
 
   @override
-  String get onBoardingBody3 => 'اجعل كل فعالية لا تُنسى بمشاركة التجربة...';
+  String get onBoardingBody3 =>
+      'اجعل كل فعالية لا تُنسى من خلال مشاركة التجربة مع الآخرين. منصتنا تتيح لك دعوة الأصدقاء، وإبقاء الجميع على اطلاع، والاحتفال باللحظات معًا. التقط وشارك لحظات الحماس مع شبكتك، لتعيد إحياء أجمل اللحظات وتحتفظ بالذكريات.';
+
+  @override
+  String get create_event => 'إنشاء حدث';
+
+  @override
+  String get title => 'العنوان';
+
+  @override
+  String get event_title => 'عنوان الحدث';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get event_description => 'وصف الحدث';
+
+  @override
+  String get event_date => 'تاريخ الحدث';
+
+  @override
+  String get choose_date => 'اختر التاريخ';
+
+  @override
+  String get event_time => 'وقت الحدث';
+
+  @override
+  String get choose_time => 'اختر الوقت';
+
+  @override
+  String get location => 'الموقع';
+
+  @override
+  String get choose_event_location => 'اختر موقع الحدث';
+
+  @override
+  String get add_event => 'إضافة حدث';
+
+  @override
+  String get add_event_successfully => 'اضيف الحدث بنجاح';
+
+  @override
+  String get success => 'تم بنجاح';
+
+  @override
+  String get no_events => 'لم تضاف احداث بعد ';
+
+  @override
+  String get event_details => 'تفاصيل الحدث';
+
+  @override
+  String get update_event => 'حدث الحدث';
+
+  @override
+  String get edit_event => 'تعديل الحدث';
 }
