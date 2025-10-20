@@ -4,6 +4,7 @@ import 'package:evently/home/tabs/homeTap/widget/event_tap_item.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/model/events.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
@@ -30,8 +31,9 @@ class _HomeTapState extends State<HomeTap> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     eventListProvider.getEventListName(context);
+    var userProvider = Provider.of<UserProvider>(context);
     if (eventListProvider.eventList.isEmpty) {
-      eventListProvider.getAllEvents();
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
     }
     // TODO: implement build
     return Directionality(
@@ -49,7 +51,8 @@ class _HomeTapState extends State<HomeTap> {
                     AppLocalizations.of(context)!.welcome_back,
                     style: AppStyles.Reg14Wight,
                   ),
-                  Text("Route Academy", style: AppStyles.bold24Wight),
+                  Text(userProvider.currentUser!.name,
+                      style: AppStyles.bold24Wight),
                 ],
               ),
               Spacer(),
@@ -111,7 +114,8 @@ class _HomeTapState extends State<HomeTap> {
 
                       child: TabBar(
                         onTap: (index) {
-                          eventListProvider.changeSelectedIndex(index);
+                          eventListProvider.changeSelectedIndex(index,
+                              userProvider.currentUser!.id);
                         },
                         isScrollable: true,
                         tabAlignment: TabAlignment.start,

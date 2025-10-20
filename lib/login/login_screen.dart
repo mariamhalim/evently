@@ -4,13 +4,20 @@ import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
+import 'package:evently/utils/dialog_utiles.dart';
+import 'package:evently/utils/firebase_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import '../model/my_user.dart';
 import '../providers/app_language_provider.dart';
+import '../providers/user_provider.dart';
 import '../utils/app_routes.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -21,9 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _languageController = ValueNotifier<bool>(false);
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController emailContriller = TextEditingController();
+  TextEditingController emailController = TextEditingController(
+      text: 'mariam@gmail.com');
 
-  TextEditingController passwordContriller = TextEditingController();
+  TextEditingController passwordController = TextEditingController(
+      text: '1132005');
 
   @override
   void initState() {
@@ -40,9 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     });
   }
+
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     // TODO: implement build
     return Directionality(
@@ -69,9 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: AppLocalizations.of(context)!.email,
                           prefixIcon: Icon(Icons.email),
                           KeyboardType: TextInputType.emailAddress,
-                          controller: emailContriller,
+                          controller: emailController,
                           validator: (text) {
-                            if (text == null || text.trim().isEmpty) {
+                            if (text == null || text
+                                .trim()
+                                .isEmpty) {
                               return 'Please enter email';
                             }
                             final bool emailValid = RegExp(
@@ -85,13 +103,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         CostumeFormField(
                           hintText: AppLocalizations.of(context)!.password,
-                          controller: passwordContriller,
+                          controller: passwordController,
                           prefixIcon: Icon(Icons.lock),
                           suffixIcon: Icon(CupertinoIcons.eye_slash),
                           obscureText: true,
                           KeyboardType: TextInputType.number,
                           validator: (text) {
-                            if (text == null || text.trim().isEmpty) {
+                            if (text == null || text
+                                .trim()
+                                .isEmpty) {
                               return 'Please enter password';
                             }
                             if (text.length < 6) {
@@ -125,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              AppLocalizations.of(context)!.have_account,
+                                AppLocalizations.of(context)!.have_account,
                                 style: Theme
                                     .of(context)
                                     .textTheme
@@ -177,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: AppColors.trancColor,
                           textStyle: AppStyles.MidBlue20,
                           hasIcon: true,
-                          onPressed: login,
+                          onPressed: loginWithGoogle,
                           borderColor: AppColors.blueColor,
                           childIconWidget: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -223,9 +243,143 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() {
+  void login() async {
     if (formKey.currentState?.validate() == true) {
-      Navigator.of(context).pushNamed(AppRoutes.RouteHomeScreen);
+      DialogUtils.showLoading(massage: 'Loading.....', context: context);
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+        var user = await FirebaseUtils.readUserFromFireStore(
+            credential.user?.uid ?? '');
+        if (user == null) {
+          return;
+        }
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateUser(user);
+
+        DialogUtils.hiddenDialog(context: context);
+
+        DialogUtils.alertMassage(
+          massage: 'Login successfully',
+          context: context,
+          title: 'Success',
+          posActionName: 'Ok',
+          posAction: () {
+            Navigator.of(context).pushReplacementNamed(
+              AppRoutes.RouteHomeScreen,
+            );
+          },
+        );
+      } on FirebaseAuthException catch (e) {
+        print('Error code: ${e.code}');
+        DialogUtils.hiddenDialog(context: context);
+
+        if (e.code == 'user-not-found') {
+          DialogUtils.alertMassage(
+            massage: 'No user found for that email.',
+            context: context,
+            title: 'Error',
+            posActionName: 'Ok',
+          );
+        } else if (e.code == 'wrong-password') {
+          DialogUtils.alertMassage(
+            massage: 'Wrong password provided for that user.',
+            context: context,
+            title: 'Error',
+            posActionName: 'Ok',
+          );
+        } else {
+          DialogUtils.alertMassage(
+            massage: e.message ?? 'Something went wrong.',
+            context: context,
+            title: 'Error',
+            posActionName: 'Ok',
+          );
+        }
+      } catch (e) {
+        DialogUtils.hiddenDialog(context: context);
+        DialogUtils.alertMassage(
+          massage: e.toString(),
+          context: context,
+          title: 'Error',
+          posActionName: 'Ok',
+        );
+      }
     }
   }
+
+  Future<void> loginWithGoogle() async {
+    try {
+      DialogUtils.showLoading(
+          massage: 'Signing in with Google...', context: context);
+
+
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        DialogUtils.hiddenDialog(context: context);
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser
+          .authentication;
+
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+
+
+      final UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      final user = userCredential.user;
+      if (user == null) {
+        DialogUtils.hiddenDialog(context: context);
+        return;
+      }
+
+
+      var myUser = await FirebaseUtils.readUserFromFireStore(user.uid);
+      if (myUser == null) {
+        myUser = MyUser(
+          id: user.uid,
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+        );
+        await FirebaseUtils.addUserToFireStore(myUser);
+      }
+
+
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.updateUser(myUser);
+
+      DialogUtils.hiddenDialog(context: context);
+      DialogUtils.alertMassage(
+        massage: 'Login successfully with Google!',
+        context: context,
+        title: 'Success',
+        posActionName: 'Ok',
+        posAction: () {
+          Navigator.of(context).pushReplacementNamed(AppRoutes.RouteHomeScreen);
+        },
+      );
+    } catch (e) {
+      DialogUtils.hiddenDialog(context: context);
+      DialogUtils.alertMassage(
+        massage: 'Google Sign-In failed: $e',
+        context: context,
+        title: 'Error',
+        posActionName: 'Ok',
+      );
+    }
+  }
+
+
+
 }
