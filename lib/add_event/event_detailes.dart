@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/event_provider.dart';
+import '../providers/user_provider.dart';
 import '../utils/app_assets.dart';
 import 'dart:ui' as ui;
 
@@ -28,6 +29,7 @@ class EventDetailsPage extends StatelessWidget {
       context,
       listen: false,
     );
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Directionality(
       textDirection: ui.TextDirection.ltr,
@@ -49,11 +51,10 @@ class EventDetailsPage extends StatelessWidget {
                   MaterialPageRoute(builder: (_) => EditEvent(event: event)),
                 );
                 if (updated == true) {
-                  // رجعي تحميل القائمة بعد التعديل
                   Provider.of<EventListProvider>(
                     context,
                     listen: false,
-                  ).getAllEvents();
+                  ).getAllEvents(userProvider.currentUser!.id);
                 }
               },
             ),
@@ -66,7 +67,10 @@ class EventDetailsPage extends StatelessWidget {
               backgroundColor: AppColors.trancColor,
               hasIcon: true,
               onPressed: () async {
-                await eventListProvider.deleteEvent(event);
+                await eventListProvider.deleteEvent(
+                    event, userProvider.currentUser!.id);
+                await eventListProvider.getAllEvents(
+                    userProvider.currentUser!.id);
                 Navigator.pop(context);
               },
             ),

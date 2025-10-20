@@ -1,19 +1,23 @@
+import 'dart:ui' as ui;
+
 import 'package:evently/add_event/date_or_time_widget.dart';
 import 'package:evently/home/tabs/FavouriteTap/widget/costum_form_feild.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/model/events.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
+import 'package:evently/utils/toast_utiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/event_provider.dart';
 import '../utils/firebase_utils.dart';
 import 'event_tap_item.dart';
-import 'dart:ui' as ui;
 
 class AddEvent extends StatefulWidget {
   const AddEvent({super.key});
@@ -304,11 +308,13 @@ class _AddEventState extends State<AddEvent> {
         eventName: selectedEventName,
         eventTime: formatTime,
       );
-
-      FirebaseUtils.addEventToFireStore(event)
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      FirebaseUtils.addEventToFireStore(event, userProvider.currentUser!.id)
           .then((_) {
-            print('Event added!');
-            eventListProvider.getAllEvents();
+        ToastUtils.showToastMes(message: 'event added successfully',
+            backGroundColor: AppColors.blueColor,
+            textColor: AppColors.whiteColor);
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
             Navigator.pop(context);
           })
           .catchError((error) {

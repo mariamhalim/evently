@@ -4,17 +4,19 @@ import 'package:evently/on_boarding_screen/intro_page.dart';
 import 'package:evently/providers/app_language_provider.dart';
 import 'package:evently/providers/app_theme_provider.dart';
 import 'package:evently/providers/event_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/register/register_screen.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
 import 'home/home_screen.dart';
+import 'l10n/app_localizations.dart';
 import 'login/login_screen.dart';
 import 'on_boarding_screen/intro_screen.dart';
-import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
         ChangeNotifierProvider(create: (_) => AppThemeProvider()),
         ChangeNotifierProvider(create: (_) => EventListProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
 
       child: const MyApp(

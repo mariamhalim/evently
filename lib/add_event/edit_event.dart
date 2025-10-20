@@ -1,8 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:evently/add_event/date_or_time_widget.dart';
 import 'package:evently/home/tabs/FavouriteTap/widget/costum_form_feild.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/model/events.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_routes.dart';
@@ -11,10 +14,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/event_provider.dart';
 import '../utils/firebase_utils.dart';
 import 'event_tap_item.dart';
-import 'dart:ui' as ui;
 
 class EditEvent extends StatefulWidget {
   final Event event;
@@ -37,6 +40,7 @@ class _EditEventState extends State<EditEvent> {
   late String selectedEventName;
   var formKey = GlobalKey<FormState>();
   late EventListProvider eventListProvider;
+  late UserProvider userProvider;
 
   bool dateError = false;
   bool timeError = false;
@@ -69,6 +73,8 @@ class _EditEventState extends State<EditEvent> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     eventListProvider = Provider.of<EventListProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
+
 
     List<String> activities = [
       AppLocalizations.of(context)!.sport,
@@ -307,9 +313,10 @@ class _EditEventState extends State<EditEvent> {
         isFavourite: widget.event.isFavourite,
       );
 
-      FirebaseUtils.updateEventInFireStore(updatedEvent)
+      FirebaseUtils.updateEventInFireStore(
+          updatedEvent, userProvider.currentUser!.id)
           .then((_) {
-            eventListProvider.getAllEvents();
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
             Navigator.pop(context);
           })
           .catchError((error) {

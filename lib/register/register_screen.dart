@@ -1,15 +1,21 @@
 import 'package:evently/home/tabs/FavouriteTap/widget/costum_form_feild.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/login/widgets/costtum_Elevated_button.dart';
+import 'package:evently/model/my_user.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_styles.dart';
+import 'package:evently/utils/dialog_utiles.dart';
+import 'package:evently/utils/firebase_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_language_provider.dart';
+import '../providers/user_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -21,13 +27,16 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
   final _languageController = ValueNotifier<bool>(false);
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController = TextEditingController(
+      text: 'mariam@gmail.com');
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController = TextEditingController(
+      text: '1132005');
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController(text: 'mariam');
 
-  TextEditingController rePasswordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController(
+      text: '1132005');
 
   @override
   void initState() {
@@ -201,7 +210,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void register() {
-    if (formKey.currentState?.validate() == true) {}
+  void register() async {
+    if (formKey.currentState?.validate() == true) {
+      DialogUtils.showLoading(massage: 'Loading.....', context: context);
+      try {
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        MyUser myUser = MyUser(
+            id: credential.user?.uid ?? '',
+            name: nameController.text,
+            email: emailController.text);
+        await FirebaseUtils.addUserToFireStore(myUser);
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateUser(myUser);
+
+        DialogUtils.hiddenDialog(context: context);
+        DialogUtils.alertMassage(massage: 'Register successfully',
+            context: context,
+            title: 'Success',
+            posActionName: 'Ok',
+            posAction: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                AppRoutes.RouteHomeScreen,
+                    (route) => false,);
+            }
+        );
+        print(credential.user?.uid ?? '');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          DialogUtils.hiddenDialog(context: context);
+          DialogUtils.alertMassage(
+            massage: 'The password provided is too weak', context: context,
+            title: 'Error',
+            posActionName: 'Ok',
+          );
+        } else if (e.code == 'email-already-in-use') {
+          DialogUtils.hiddenDialog(context: context);
+          DialogUtils.alertMassage(
+            massage: 'The account already exists for that email.',
+            context: context,
+            title: 'Error',
+            posActionName: 'Ok',
+          );
+        }
+      } catch (e) {
+        DialogUtils.hiddenDialog(context: context);
+        DialogUtils.alertMassage(massage: e.toString(), context: context,
+          title: 'Error',
+          posActionName: 'Ok',
+        );
+      }
+    }
   }
 }

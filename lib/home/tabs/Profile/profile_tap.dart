@@ -5,11 +5,13 @@ import 'package:evently/login/widgets/costtum_Elevated_button.dart';
 import 'package:evently/providers/app_language_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/app_theme_provider.dart';
+import '../../../providers/user_provider.dart';
 
 class ProfileTap extends StatefulWidget {
   @override
@@ -23,6 +25,7 @@ class _ProfileTapState extends State<ProfileTap> {
     var width = MediaQuery.of(context).size.width;
     var ThemeProvider = Provider.of<AppThemeProvider>(context);
     var languageProvider = Provider.of<AppLanguageProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     // TODO: implement build
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -42,9 +45,11 @@ class _ProfileTapState extends State<ProfileTap> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('John Safwat', style: AppStyles.bold24Wight),
                   Text(
-                    'johnsafwat.route@gmail.\ncom',
+                    userProvider.currentUser!.name,
+                    style: AppStyles.bold24Wight,
+                  ), Text(
+                    userProvider.currentUser!.email,
                     style: AppStyles.MidWhite20,
                   ),
                 ],
@@ -136,7 +141,11 @@ class _ProfileTapState extends State<ProfileTap> {
               Padding(
                 padding: EdgeInsets.only(bottom: height * 0.01),
                 child: CostumeElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context, AppRoutes.LoginRouteScreen,
+                          (route) => false,);
+                  },
                   childIconWidget: Row(
                     children: [
                       SizedBox(
