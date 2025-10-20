@@ -48,7 +48,7 @@ class _ProfileTapState extends State<ProfileTap> {
                   Text(
                     userProvider.currentUser!.name,
                     style: AppStyles.bold24Wight,
-                  )Text(
+                  ), Text(
                     userProvider.currentUser!.email,
                     style: AppStyles.MidWhite20,
                   ),
